@@ -1,5 +1,5 @@
-﻿using LIN.Access.Developer.Controllers;
-using LIN.Cloud.PostgreSQL.Manager.Services.Data;
+﻿using LIN.Cloud.PostgreSQL.Manager.Services.Data;
+using LIN.Types.Responses;
 
 namespace LIN.Cloud.PostgreSQL.Manager.Services.Local;
 
@@ -12,13 +12,19 @@ public class ManagementService(DatabasesManager databaseManager, UsersManager us
     /// <param name="databaseName">Nombre BD.</param>
     /// <param name="username">Usuario.</param>
     /// <param name="password">Contraseña.</param>
-    public async Task CreateDatabaseWithUserAsync(string databaseName, string username, string password, int project)
+    public async Task<CreateResponse> CreateDatabaseWithUserAsync(string databaseName, string username, string password, int project)
     {
         // Crear la base de datos
-        await databaseManager.CreateDatabaseAsync(databaseName);
+        var databaseResponse = await databaseManager.CreateDatabaseAsync(databaseName);
 
+        if (databaseResponse.Response != Responses.Success)
+            return databaseResponse;
+        
         // Crear el usuario
-        await usersManager.CreateUserAsync(username, password, databaseName);
+        var userResponse = await usersManager.CreateUserAsync(username, password, databaseName);
+
+        if (userResponse.Response != Responses.Success)
+            return userResponse;
 
         // Crear registro
         conector.Start("master");
@@ -30,7 +36,7 @@ public class ManagementService(DatabasesManager databaseManager, UsersManager us
             await command.ExecuteNonQueryAsync();
         }
 
-
+        return new(Responses.Success);
     }
 
     public async Task DeleteDatabaseWithUserAsync(string databaseName, string username)

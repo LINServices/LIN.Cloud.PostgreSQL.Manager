@@ -1,9 +1,11 @@
-﻿using Npgsql;
+﻿using LIN.Types.Responses;
+using Npgsql;
 
 namespace LIN.Cloud.PostgreSQL.Manager.Services;
 
 public class UsersManager(NpgsqlConnection dbConnection)
 {
+
 
     /// <summary>
     /// Crear usuario.
@@ -11,17 +13,28 @@ public class UsersManager(NpgsqlConnection dbConnection)
     /// <param name="username">Usuario</param>
     /// <param name="password">Contraseña.</param>
     /// <param name="databaseName">Base de datos para dar permisos.</param>
-    public async Task CreateUserAsync(string username, string password, string databaseName)
+    public async Task<CreateResponse> CreateUserAsync(string username, string password, string databaseName)
     {
-        var commandText = $"CREATE USER \"{username}\" WITH PASSWORD '{password}'";
-
-        using (var command = dbConnection.CreateCommand())
+        try
         {
-            command.CommandText = commandText;
-            await command.ExecuteNonQueryAsync();
-        }
+            var commandText = $"CREATE USER \"{username}\" WITH PASSWORD '{password.Replace("'", "''")}'";
 
-        await GrantPermissionsAsync(username, databaseName, "CONNECT");  // Permitir la conexión por defecto.
+            using (var command = dbConnection.CreateCommand())
+            {
+                command.CommandText = commandText;
+                await command.ExecuteNonQueryAsync();
+            }
+
+            await GrantPermissionsAsync(username, databaseName, "CONNECT");  // Permitir la conexión por defecto.
+
+            return new(Responses.Success);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("already exists"))
+                return new(Responses.ExistAccount);
+        }
+        return new(Responses.Undefined);
     }
 
 

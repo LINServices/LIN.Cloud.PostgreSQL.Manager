@@ -1,14 +1,16 @@
 ﻿using LIN.Cloud.PostgreSQL.Manager.Services.Data;
 using LIN.Types.Cloud.PostgreSQL.Models;
+using LIN.Types.Responses;
 using Npgsql;
 
 namespace LIN.Cloud.PostgreSQL.Manager.Services;
 
 public class DatabasesManager
 {
+
     private readonly NpgsqlConnection _dbConnection;
 
-    DatabaseConector conector;
+    readonly DatabaseConector conector;
 
     public DatabasesManager(NpgsqlConnection dbConnection, DatabaseConector conector)
     {
@@ -16,16 +18,39 @@ public class DatabasesManager
         this.conector = conector;
     }
 
-    public async Task CreateDatabaseAsync(string databaseName)
-    {
-        var commandText = $"CREATE DATABASE {databaseName}";
 
-        using (var command = _dbConnection.CreateCommand())
+    /// <summary>
+    /// Crear base de datos.
+    /// </summary>
+    /// <param name="databaseName">Nombre de BD.</param>
+    public async Task<CreateResponse> CreateDatabaseAsync(string databaseName)
+    {
+        try
         {
+            var commandText = $"CREATE DATABASE {databaseName}";
+
+            using var command = _dbConnection.CreateCommand();
             command.CommandText = commandText;
             await command.ExecuteNonQueryAsync();
+            return new(Responses.Success);
         }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("already exists"))
+                return new()
+                {
+                    Response = Responses.ResourceExist
+                };
+        }
+
+        return new(Responses.Undefined);
     }
+
+
+
+
+
+
 
     public async Task DeleteDatabaseAsync(string databaseName)
     {

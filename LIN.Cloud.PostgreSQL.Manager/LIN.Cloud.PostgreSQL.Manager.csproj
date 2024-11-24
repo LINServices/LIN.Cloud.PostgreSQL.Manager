@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\..\Tipos\LIN.Types.Cloud.PostgreSQL\LIN.Types.Cloud.PostgreSQL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

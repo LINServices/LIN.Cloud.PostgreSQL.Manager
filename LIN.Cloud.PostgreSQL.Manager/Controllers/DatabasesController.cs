@@ -11,37 +11,83 @@ public class DatabasesController(ManagementService managementService, DatabasesM
 {
 
     /// <summary>
-    /// Crear una base de datos y su usuario asociado
+    /// Crear nueva base de datos.
     /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
+    /// <param name="request">Contenido.</param>
+    /// <param name="cloud">Token cloud.</param>
+    /// <param name="key">Key.</param>
     [HttpPost]
-    public async Task<IActionResult> CreateDatabaseWithUser([FromBody] CreateDatabaseRequest request, [FromHeader] string cloud, [FromHeader] string key)
+    public async Task<HttpCreateResponse> Create([FromBody] CreateDatabaseRequest request, [FromHeader] string cloud, [FromHeader] string key)
     {
-        try
-        {
 
-            // Validar token.
-            var (autenticated, _, project) = LIN.Cloud.Identity.Utilities.JwtCloud.Validate(cloud);
+        // Validar token.
+        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
-            if (!autenticated)
+        // Si no está autenticado, retornar error.
+        if (!authenticated)
+            return new()
             {
-                return BadRequest();
-            }
+                Message = "Token invalido",
+                Response = Types.Responses.Responses.Unauthorized
+            };
+
+        // Validar parámetros.
+        var validationResults = Validations.Validate(request);
+
+        if (validationResults.Count > 0)
+            return new()
+            {
+                Message = "Error en los parámetros",
+                Response = Types.Responses.Responses.InvalidParam,
+                Errors = validationResults
+            };
+
+        // Generar el cobro de aprovisionamiento de la base de datos.
+        var billing = await Access.Developer.Controllers.Billings.Create(key, 100);
+
+        if (billing.Response != Types.Responses.Responses.Success)
+            return new()
+            {
+                Response = Types.Responses.Responses.WithoutCredits,
+                Message = "Error al generar el cobro.",
+            };
+
+        // Crear la base de datos.
+        var create = await managementService.CreateDatabaseWithUserAsync(request.DatabaseName, request.Username, request.Password, project);
+
+        return create;
+
+    }
 
 
-            var billing = await LIN.Access.Developer.Controllers.Billings.Create(key, 24);
+    /// <summary>
+    /// Obtener una base de datos.
+    /// </summary>
+    /// <param name="cloud">Token cloud.</param>
+    [HttpGet]
+    public async Task<HttpReadOneResponse<DataBaseModel>> Get([FromHeader] string cloud)
+    {
 
-            if (billing.Response != Types.Responses.Responses.Success)
-                return BadRequest("Error al cobrar");
+        // Validar token.
+        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
-            await managementService.CreateDatabaseWithUserAsync(request.DatabaseName, request.Username, request.Password, project);
-            return CreatedAtAction(nameof(GetDatabase), new { databaseName = request.DatabaseName }, null);
-        }
-        catch (Exception ex)
+        // Si no está autenticado, retornar error.
+        if (!authenticated)
+            return new()
+            {
+                Response = Types.Responses.Responses.Unauthorized,
+                Message = "Token invalido"
+            };
+
+        // Bases de datos relacionadas al usuario.
+        var all = await manager.Read(project);
+
+        // Lógica para obtener las bases de datos disponibles
+        return new Types.Responses.ReadOneResponse<DataBaseModel>()
         {
-            return BadRequest(ex.Message);
-        }
+            Response = Types.Responses.Responses.Success,
+            Model = all
+        };
     }
 
 
@@ -51,7 +97,7 @@ public class DatabasesController(ManagementService managementService, DatabasesM
     /// <param name="databaseName"></param>
     /// <returns></returns>
     [HttpDelete("{databaseName}")]
-    public async Task<IActionResult> DeleteDatabase(string databaseName)
+    public async Task<IActionResult> Delete(string databaseName)
     {
         try
         {
@@ -62,57 +108,6 @@ public class DatabasesController(ManagementService managementService, DatabasesM
         {
             return BadRequest(ex.Message);
         }
-    }
-
-
-    /// <summary>
-    /// Obtener la lista de bases de datos
-    /// </summary>
-    [HttpGet]
-    public async Task<HttpReadAllResponse<DataBaseModel>> GetDatabases([FromHeader] string token)
-    {
-
-        var authentication = await LIN.Access.Developer.Controllers.Authentication.Login(token);
-
-        if (authentication.Response != Types.Responses.Responses.Success)
-            return new();
-
-        // Bases de datos relacionadas al usuario.
-        var all = await manager.ReadAll(authentication.Model.Profile.Id);
-
-        // Lógica para obtener las bases de datos disponibles
-        return new LIN.Types.Responses.ReadAllResponse<DataBaseModel>()
-        {
-            Response = Types.Responses.Responses.Success,
-            Models = all
-        };
-    }
-
-
-    /// <summary>
-    /// Obtener la lista de bases de datos
-    /// </summary>
-    [HttpGet("one")]
-    public async Task<HttpReadOneResponse<DataBaseModel>> GetDatabase([FromHeader] string cloud)
-    {
-
-        // Validar token.
-        var (autenticated, _, project) = LIN.Cloud.Identity.Utilities.JwtCloud.Validate(cloud);
-
-        if (!autenticated)
-        {
-            return new();
-        }
-
-        // Bases de datos relacionadas al usuario.
-        var all = await manager.Read(project);
-
-        // Lógica para obtener las bases de datos disponibles
-        return new LIN.Types.Responses.ReadOneResponse<DataBaseModel>()
-        {
-            Response = Types.Responses.Responses.Success,
-            Model = all
-        };
     }
 
 }
