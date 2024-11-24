@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Cloud.PostgreSQL.Manager", "LIN.Cloud.PostgreSQL.Manager\LIN.Cloud.PostgreSQL.Manager.csproj", "{1D210EB4-2AE9-47A3-A233-846421C3CF60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Types.Cloud.PostgreSQL", "..\..\Tipos\LIN.Types.Cloud.PostgreSQL\LIN.Types.Cloud.PostgreSQL.csproj", "{D4C13752-A52C-4B64-BA96-76B79CF2D9DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Cloud.Identity.Utilities", "..\..\Shared\LIN.Cloud.Identity.Utilities\LIN.Cloud.Identity.Utilities.csproj", "{DC59003A-2227-4A72-A17D-B10591048F47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D210EB4-2AE9-47A3-A233-846421C3CF60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D210EB4-2AE9-47A3-A233-846421C3CF60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D210EB4-2AE9-47A3-A233-846421C3CF60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D210EB4-2AE9-47A3-A233-846421C3CF60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C13752-A52C-4B64-BA96-76B79CF2D9DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C13752-A52C-4B64-BA96-76B79CF2D9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C13752-A52C-4B64-BA96-76B79CF2D9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C13752-A52C-4B64-BA96-76B79CF2D9DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC59003A-2227-4A72-A17D-B10591048F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC59003A-2227-4A72-A17D-B10591048F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC59003A-2227-4A72-A17D-B10591048F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC59003A-2227-4A72-A17D-B10591048F47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Http.Utils" Version="2.8.0.2" />
+    <PackageReference Include="LIN.Access.Developer" Version="1.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Npgsql" Version="9.0.0" />
+    <PackageReference Include="Scalar.AspNetCore" Version="1.2.39" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\LIN.Cloud.Identity.Utilities\LIN.Cloud.Identity.Utilities.csproj" />
+    <ProjectReference Include="..\..\..\Tipos\LIN.Types.Cloud.PostgreSQL\LIN.Types.Cloud.PostgreSQL.csproj" />
+  </ItemGroup>
+
+</Project>
