@@ -19,12 +19,17 @@ public class ManagementService(DatabasesManager databaseManager, UsersManager us
 
         if (databaseResponse.Response != Responses.Success)
             return databaseResponse;
-        
+
         // Crear el usuario
         var userResponse = await usersManager.CreateUserAsync(username, password, databaseName);
 
         if (userResponse.Response != Responses.Success)
+        {
+            // Eliminar BD.
+            await databaseManager.DeleteDatabaseAsync(databaseName);
             return userResponse;
+        }
+
 
         // Crear registro
         conector.Start("master");

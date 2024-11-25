@@ -32,7 +32,14 @@ public class UsersManager(NpgsqlConnection dbConnection)
         catch (Exception ex)
         {
             if (ex.Message.Contains("already exists"))
-                return new(Responses.ExistAccount);
+                return new(Responses.ExistAccount)
+                {
+                    Errors = [
+                    new() {
+                        Tittle = "Usuario de BD",
+                        Description = $"El usuario {username} ya se encuentra en el sistema."
+                    }]
+                };
         }
         return new(Responses.Undefined);
     }

@@ -39,7 +39,12 @@ public class DatabasesManager
             if (ex.Message.Contains("already exists"))
                 return new()
                 {
-                    Response = Responses.ResourceExist
+                    Response = Responses.ResourceExist,
+                    Errors =[
+                    new() {
+                        Tittle = "Base de datos",
+                        Description = $"La base de datos {databaseName} esta ocupada"
+                    }]
                 };
         }
 
