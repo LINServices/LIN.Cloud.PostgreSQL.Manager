@@ -19,7 +19,8 @@ public class Validations
             errors.Add(new LIN.Types.Models.ErrorModel
             {
                 Tittle = "DatabaseName",
-                Description = message
+                Description = message,
+                Type = Types.Enumerations.ErrorTypes.User
             });
 
         // Validar nombre de usuario.
@@ -27,7 +28,8 @@ public class Validations
             errors.Add(new LIN.Types.Models.ErrorModel
             {
                 Tittle = "Username",
-                Description = message
+                Description = message,
+                Type = Types.Enumerations.ErrorTypes.User
             });
 
         return errors;

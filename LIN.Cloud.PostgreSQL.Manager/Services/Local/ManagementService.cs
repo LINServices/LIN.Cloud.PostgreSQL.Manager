@@ -30,7 +30,6 @@ public class ManagementService(DatabasesManager databaseManager, UsersManager us
             return userResponse;
         }
 
-
         // Crear registro
         conector.Start("master");
 

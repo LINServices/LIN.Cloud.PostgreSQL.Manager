@@ -43,7 +43,8 @@ public class DatabasesManager
                     Errors =[
                     new() {
                         Tittle = "Base de datos",
-                        Description = $"La base de datos {databaseName} esta ocupada"
+                        Description = $"El nombre de la base de datos {databaseName} esta ocupada",
+                        Type = Types.Enumerations.ErrorTypes.User
                     }]
                 };
         }

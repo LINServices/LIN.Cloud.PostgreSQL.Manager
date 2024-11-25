@@ -21,10 +21,4 @@ public class DatabaseConector
         Connection.Open();
     }
 
-
-
-
-
-
-
 }

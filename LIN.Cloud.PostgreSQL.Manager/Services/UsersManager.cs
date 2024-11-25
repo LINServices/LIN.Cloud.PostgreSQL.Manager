@@ -37,7 +37,8 @@ public class UsersManager(NpgsqlConnection dbConnection)
                     Errors = [
                     new() {
                         Tittle = "Usuario de BD",
-                        Description = $"El usuario {username} ya se encuentra en el sistema."
+                        Description = $"El usuario {username} ya se encuentra en el sistema.",
+                        Type = Types.Enumerations.ErrorTypes.User
                     }]
                 };
         }
