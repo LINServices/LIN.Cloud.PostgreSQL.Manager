@@ -9,7 +9,7 @@ public class Validations
     /// <summary>
     /// Validar.
     /// </summary>
-    public static List<LIN.Types.Models.ErrorModel> Validate(CreateDatabaseRequest request)
+    public static List<Types.Models.ErrorModel> Validate(CreateDatabaseRequest request)
     {
 
         List<LIN.Types.Models.ErrorModel> errors = [];

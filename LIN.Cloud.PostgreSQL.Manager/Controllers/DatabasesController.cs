@@ -2,6 +2,7 @@
 using LIN.Cloud.PostgreSQL.Manager.Services;
 using LIN.Cloud.PostgreSQL.Manager.Services.Local;
 using LIN.Types.Cloud.PostgreSQL.Models;
+using LIN.Types.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LIN.Cloud.PostgreSQL.Manager.Controllers;
@@ -28,7 +29,12 @@ public class DatabasesController(ManagementService managementService, DatabasesM
             return new()
             {
                 Message = "Token invalido",
-                Response = Types.Responses.Responses.Unauthorized
+                Response = Types.Responses.Responses.Unauthorized,
+                Errors = [new ErrorModel() {
+                    Description = "El token es invalido",
+                    Tittle = "Token invalido",
+                    Type = Types.Enumerations.ErrorTypes.System
+                }]
             };
 
         // Validar parámetros.
@@ -50,6 +56,11 @@ public class DatabasesController(ManagementService managementService, DatabasesM
             {
                 Response = Types.Responses.Responses.WithoutCredits,
                 Message = "Error al generar el cobro.",
+                Errors = [new ErrorModel() {
+                    Description = "Error al generar el cobro por 100 créditos",
+                    Tittle = "Pago",
+                    Type = Types.Enumerations.ErrorTypes.User
+                }]
             };
 
         // Crear la base de datos.
@@ -76,7 +87,12 @@ public class DatabasesController(ManagementService managementService, DatabasesM
             return new()
             {
                 Response = Types.Responses.Responses.Unauthorized,
-                Message = "Token invalido"
+                Message = "Token invalido",
+                 Errors = [new ErrorModel() {
+                    Description = "El token es invalido",
+                    Tittle = "Token invalido",
+                    Type = Types.Enumerations.ErrorTypes.System
+                }]
             };
 
         // Bases de datos relacionadas al usuario.
