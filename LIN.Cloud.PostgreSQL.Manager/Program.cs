@@ -3,6 +3,7 @@ using LIN.Cloud.PostgreSQL.Manager.Services.Data;
 using LIN.Cloud.PostgreSQL.Manager.Services.Local;
 using Npgsql;
 using Http.Extensions;
+using LIN.Access.Developer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddLINHttp();
-
-LIN.Access.Developer.Build.Init();
+builder.Services.AddDeveloperService();
 
 builder.Services.AddScoped(t =>
 {

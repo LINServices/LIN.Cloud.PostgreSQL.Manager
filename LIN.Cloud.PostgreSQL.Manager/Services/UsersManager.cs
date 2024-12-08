@@ -17,6 +17,7 @@ public class UsersManager(NpgsqlConnection dbConnection)
     {
         try
         {
+            // Crear el usuario.
             var commandText = $"CREATE USER \"{username}\" WITH PASSWORD '{password.Replace("'", "''")}'";
 
             using (var command = dbConnection.CreateCommand())
@@ -25,7 +26,8 @@ public class UsersManager(NpgsqlConnection dbConnection)
                 await command.ExecuteNonQueryAsync();
             }
 
-            await GrantPermissionsAsync(username, databaseName, "CONNECT");  // Permitir la conexión por defecto.
+            // Asignar los permisos al usuario sobre la base de datos.
+            await GrantPermissionsAsync(username, databaseName, "CONNECT, CREATE, TEMP"); 
 
             return new(Responses.Success);
         }
