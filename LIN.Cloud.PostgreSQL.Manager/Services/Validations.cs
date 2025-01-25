@@ -71,7 +71,7 @@ public class Validations
     {
         // Validaciones para nombres de usuario
         // 1. Longitud mínima y máxima (por ejemplo, 3-20 caracteres)
-        if (name.Length < 3 || name.Length > 20)
+        if (name.Length is < 3 or > 20)
         {
             message = "El nombre de usuario debe tener entre 3 y 20 caracteres.";
             return false;

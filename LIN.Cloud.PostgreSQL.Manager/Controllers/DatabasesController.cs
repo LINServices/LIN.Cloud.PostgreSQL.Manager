@@ -22,7 +22,7 @@ public class DatabasesController(ManagementService managementService, DatabasesM
     {
 
         // Validar token.
-        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
+        var (authenticated, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
         // Si no está autenticado, retornar error.
         if (!authenticated)
@@ -80,7 +80,7 @@ public class DatabasesController(ManagementService managementService, DatabasesM
     {
 
         // Validar token.
-        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
+        var (authenticated, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
         // Si no está autenticado, retornar error.
         if (!authenticated)
@@ -88,7 +88,7 @@ public class DatabasesController(ManagementService managementService, DatabasesM
             {
                 Response = Types.Responses.Responses.Unauthorized,
                 Message = "Token invalido",
-                 Errors = [new ErrorModel() {
+                Errors = [new ErrorModel() {
                     Description = "El token es invalido",
                     Tittle = "Token invalido",
                     Type = Types.Enumerations.ErrorTypes.System

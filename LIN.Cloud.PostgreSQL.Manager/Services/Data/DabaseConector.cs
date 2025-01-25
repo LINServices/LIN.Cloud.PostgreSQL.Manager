@@ -14,7 +14,6 @@ public class DatabaseConector
         _databaseName = configuration.GetConnectionString("postgre");
     }
 
-
     public void Start(string databaseName)
     {
         Connection = new NpgsqlConnection($"{_databaseName} database={databaseName}");

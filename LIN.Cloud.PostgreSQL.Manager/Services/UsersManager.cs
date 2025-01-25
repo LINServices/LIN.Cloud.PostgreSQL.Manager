@@ -27,7 +27,7 @@ public class UsersManager(NpgsqlConnection dbConnection)
             }
 
             // Asignar los permisos al usuario sobre la base de datos.
-            await GrantPermissionsAsync(username, databaseName, "CONNECT, CREATE, TEMP"); 
+            await GrantPermissionsAsync(username, databaseName, "CONNECT, CREATE, TEMP");
 
             return new(Responses.Success);
         }

@@ -9,8 +9,7 @@ public class DatabasesManager
 {
 
     private readonly NpgsqlConnection _dbConnection;
-
-    readonly DatabaseConector conector;
+    private readonly DatabaseConector conector;
 
     public DatabasesManager(NpgsqlConnection dbConnection, DatabaseConector conector)
     {
@@ -40,7 +39,7 @@ public class DatabasesManager
                 return new()
                 {
                     Response = Responses.ResourceExist,
-                    Errors =[
+                    Errors = [
                     new() {
                         Tittle = "Base de datos",
                         Description = $"El nombre de la base de datos {databaseName} esta ocupada",
