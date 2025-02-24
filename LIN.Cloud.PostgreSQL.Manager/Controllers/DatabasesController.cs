@@ -76,7 +76,7 @@ public class DatabasesController(ManagementService managementService, DatabasesM
     /// </summary>
     /// <param name="cloud">Token cloud.</param>
     [HttpGet]
-    public async Task<HttpReadOneResponse<DataBaseModel>> Get([FromHeader] string cloud)
+    public async Task<HttpReadOneResponse<LIN.Types.Developer.Projects.PostgreSQLProject>> Get([FromHeader] string cloud)
     {
 
         // Validar token.
@@ -96,13 +96,18 @@ public class DatabasesController(ManagementService managementService, DatabasesM
             };
 
         // Bases de datos relacionadas al usuario.
-        var all = await manager.Read(project);
+        var model = await manager.Read(project);
 
         // Lógica para obtener las bases de datos disponibles
-        return new Types.Responses.ReadOneResponse<DataBaseModel>()
+        return new Types.Responses.ReadOneResponse<Types.Developer.Projects.PostgreSQLProject>()
         {
-            Response = Types.Responses.Responses.Success,
-            Model = all
+            Response = model is null ? Types.Responses.Responses.NotRows : Types.Responses.Responses.Success,
+            Model = new()
+            {
+                IsProvisioned = model is not null,
+                DatabaseName = model?.Name ?? string.Empty,
+                DatabaseId = model?.Id ?? 0,
+            }
         };
     }
 

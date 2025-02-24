@@ -122,7 +122,7 @@ public class DatabasesManager
     }
 
 
-    public async Task<DataBaseModel> Read(int id)
+    public async Task<DataBaseModel?> Read(int id)
     {
 
         conector.Start("master");
